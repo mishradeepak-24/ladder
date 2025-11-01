@@ -3828,32 +3828,58 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 
   // Mobile & desktop responsive, NO overlay
   return (
+    // <div
+    //   className="fixed left-0 top-0 right-0 bottom-0 z-50 flex items-center justify-center px-2 pointer-events-none"
+    //   style={{ minHeight: "100vh" }}
+    // >
+    //   <div
+    //     className="
+    //       w-full
+    //       max-w-xs            // ~320px for mobile
+    //       sm:max-w-md         // ~380px for desktop/small tablets
+    //       h-[60vh]
+    //       bg-gray-900
+    //       text-white
+    //       rounded-xl
+    //       shadow-2xl
+    //       flex flex-col
+    //       overflow-hidden
+    //       border border-gray-700
+    //       pointer-events-auto
+    //     "
+    //     style={{
+    //       minWidth: 0,
+    //       maxWidth: "95vw",
+    //       minHeight: 340,
+    //       maxHeight: "90vh",
+    //     }}
+    //   >
+
     <div
-      className="fixed left-0 top-0 right-0 bottom-0 z-50 flex items-center justify-center px-2 pointer-events-none"
-      style={{ minHeight: "100vh" }}
-    >
-      <div
-        className="
-          w-full
-          max-w-xs            // ~320px for mobile
-          sm:max-w-md         // ~380px for desktop/small tablets
-          h-[60vh]
-          bg-gray-900
-          text-white
-          rounded-xl
-          shadow-2xl
-          flex flex-col
-          overflow-hidden
-          border border-gray-700
-          pointer-events-auto
-        "
-        style={{
-          minWidth: 0,
-          maxWidth: "95vw",
-          minHeight: 340,
-          maxHeight: "90vh",
-        }}
-      >
+  className="fixed left-0 top-0 right-0 bottom-0 z-50 flex items-center justify-center px-2 pointer-events-none"
+  style={{ minHeight: "100vh" }}
+>
+  <div
+    className="
+      w-[98vw]          // almost full mobile width
+      max-w-sm          // upto 640px on desktop, 100% on mobile
+      h-[60vh]
+      bg-gray-900
+      text-white
+      rounded-xl
+      shadow-2xl
+      flex flex-col
+      overflow-hidden
+      border border-gray-700
+      pointer-events-auto
+    "
+    style={{
+      minWidth: 0,
+      maxWidth: "98vw",      // Don't go outside viewport
+      minHeight: 340,
+      maxHeight: "90vh",
+    }}
+  >
         {/* Header */}
         <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700 flex-shrink-0 relative">
           <h2 className="text-lg font-semibold flex-1 text-center">ChatBoard</h2>
