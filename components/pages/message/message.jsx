@@ -3543,12 +3543,15 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
     setMessage("");
   };
 
+  // Lock body scroll when modal open
   useEffect(() => {
-    document.body.style.overflow = "auto";
-    document.body.style.overflowX = "auto";
+    const originalOverflow = document.body.style.overflow;
+    const originalOverscroll = document.body.style.overscrollBehaviorY;
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehaviorY = "contain";
     return () => {
-      document.body.style.overflow = "auto";
-      document.body.style.overflowX = "auto";
+      document.body.style.overflow = originalOverflow;
+      document.body.style.overscrollBehaviorY = originalOverscroll;
     };
   }, []);
 
@@ -3559,16 +3562,14 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-      style={{
-        minHeight: "100vh",
-      }}
+      style={{ minHeight: "100vh", background: "transparent" }} // no overlay
     >
       <div
         className="
           w-full
           mx-2
           max-w-[420px]
-          h-[65vh]
+          h-[67vh]
           bg-gray-900
           text-white
           rounded-xl
@@ -3585,7 +3586,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
           maxHeight: "95vh",
         }}
       >
-        {/* Header */}
+        {/* HEADER */}
         <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700 flex-shrink-0 relative">
           <h2 className="text-lg font-semibold flex-1 text-center">ChatBoard</h2>
           <button
@@ -3596,9 +3597,18 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
           </button>
         </div>
 
-        {/* Messages Area */}
+        {/* MESSAGES AREA */}
         <div
-          className="flex-1 overflow-y-auto p-4 bg-white space-y-3"
+          className="
+            flex-1
+            overflow-y-auto
+            p-4
+            bg-white
+            space-y-3
+            scrollbar-thin
+            scrollbar-thumb-gray-600
+            scrollbar-track-gray-700
+          "
           style={{
             WebkitOverflowScrolling: "touch",
             overscrollBehavior: "contain",
@@ -3646,7 +3656,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
           <div ref={chatEndRef} />
         </div>
 
-        {/* Input Section */}
+        {/* INPUT SECTION */}
         <div className="bg-gray-800 border-t border-gray-700 p-2 flex items-center flex-shrink-0 space-x-1" style={{ minHeight: 56 }}>
           <textarea
             placeholder="Type your message..."
