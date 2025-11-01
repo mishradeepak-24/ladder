@@ -3455,6 +3455,10 @@
 
 
 
+
+
+
+
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
@@ -3560,38 +3564,27 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
     /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   return (
-<div
-    className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none overflow-x-hidden"
-    style={{
-      minHeight: "100vh",
-      background: "transparent",
-      overflowX: "hidden", // Strictly lock horizontal scroll
-    }}
-  >
     <div
-      className="
-        w-full
-        mx-2
-        max-w-[420px]
-        h-[67vh]
-        bg-gray-900
-        text-white
-        rounded-xl
-        shadow-2xl
-        flex flex-col
-        overflow-hidden
-        border border-gray-700
-        pointer-events-auto
-      "
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
       style={{
-        minWidth: 0,
-        maxWidth: "100vw",
-        minHeight: 320,
-        maxHeight: "95vh",
-        boxSizing: "border-box",
-        overflowX: "hidden", // lock modal itself
+        minHeight: "100vh",
+        width: "100vw",
+        overflowX: "hidden",
+        background: "transparent",
       }}
     >
+      <div
+        className="w-full mx-2 max-w-[420px] h-[67vh] bg-gray-900 text-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-700 pointer-events-auto"
+        style={{
+          minWidth: 0,
+          maxWidth: "100vw",
+          width: "100%",
+          minHeight: 320,
+          maxHeight: "95vh",
+          boxSizing: "border-box",
+          overflowX: "hidden",
+        }}
+      >
         {/* HEADER */}
         <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700 flex-shrink-0 relative">
           <h2 className="text-lg font-semibold flex-1 text-center">ChatBoard</h2>
@@ -3605,22 +3598,16 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 
         {/* MESSAGES AREA */}
         <div
-          className="
-            flex-1
-            overflow-y-auto
-            p-4
-            bg-white
-            space-y-3
-            scrollbar-thin
-            scrollbar-thumb-gray-600
-            scrollbar-track-gray-700
-          "
+          className="flex-1 overflow-y-auto p-4 bg-white space-y-3"
           style={{
             WebkitOverflowScrolling: "touch",
             overscrollBehavior: "contain",
             height: "100%",
             minHeight: 0,
             maxHeight: "calc(100% - 56px - 56px)",
+            width: "100%",
+            maxWidth: "100%",
+            overflowX: "hidden",
           }}
         >
           {messages.length === 0 && (
@@ -3635,6 +3622,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
               <div
                 key={i}
                 className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}
+                style={{ width: "100%", maxWidth: "100%" }}
               >
                 <div
                   className={`px-3 py-2 rounded-lg shadow max-w-[80%] break-words whitespace-pre-wrap ${
@@ -3663,28 +3651,11 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
         </div>
 
         {/* INPUT SECTION */}
-        <div className="bg-gray-800 border-t border-gray-700 p-2 flex items-center flex-shrink-0 space-x-1" style={{ minHeight: 56 }}>
+        <div className="bg-gray-800 border-t border-gray-700 p-2 flex items-center flex-shrink-0 space-x-1" style={{ minHeight: 56, width: "100%" }}>
           <textarea
             placeholder="Type your message..."
-            className="
-              flex-1
-              bg-gray-700
-              text-white
-              placeholder-gray-400
-              border
-              border-gray-600
-              focus:border-blue-500
-              focus:ring-0
-              outline-none
-              px-2
-              py-2
-              text-sm
-              resize-none
-              rounded-md
-              leading-5
-              overflow-y-auto
-              max-h-24
-            "
+            className="flex-1 bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:border-blue-500 focus:ring-0 outline-none px-2 py-2 text-sm resize-none rounded-md leading-5 overflow-y-auto max-h-24"
+            style={{ width: "100%", maxWidth: "100%" }}
             value={message}
             rows={1}
             onChange={(e) => setMessage(e.target.value)}
@@ -3715,6 +3686,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 };
 
 export default MessageBoard;
+
 
 
 
