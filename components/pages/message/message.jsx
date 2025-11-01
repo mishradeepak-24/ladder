@@ -3727,6 +3727,12 @@
 
 
 
+
+
+
+
+
+
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
@@ -3828,18 +3834,16 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
     typeof navigator !== "undefined" &&
     /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+  // This modal will always fit, no cut, nicely padded on all screens.
   return (
-    // responsive popup, never cuts, always fits viewport
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-3"
-      style={{
-        minHeight: "100vh",
-      }}
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ minHeight: "100vh", pointerEvents: "none" }}
     >
       <div
         className="
           w-full
-          max-w-[370px]
+          max-w-[425px]
           h-[62vh]
           bg-gray-900
           text-white
@@ -3848,14 +3852,14 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
           flex flex-col
           overflow-hidden
           border border-gray-700
-          mx-auto
+          mx-2             // critical! horizontal gap on all mobiles!
           pointer-events-auto
         "
         style={{
           minWidth: 0,
-          maxWidth: "100vw", // full viewport on mobile
+          maxWidth: "100vw",
           minHeight: 340,
-          maxHeight: "98vh",
+          maxHeight: "98vh"
         }}
       >
         {/* Header */}
@@ -3877,7 +3881,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
             overscrollBehavior: "contain",
             height: "100%",
             minHeight: 0,
-            maxHeight: "calc(100% - 56px - 56px)",
+            maxHeight: "calc(100% - 56px - 56px)"
           }}
         >
           {messages.length === 0 && (
@@ -3972,5 +3976,6 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 };
 
 export default MessageBoard;
+
 
 
