@@ -1,0 +1,6 @@
+export const registerPage = '/register-page'
+export const loginPage = '/login-page'
+export const playerLists = '/player-list'
+export const paymentPage = '/payment'
+export const adminPage = '/admin-page'
+export const couponLists = '/coupon/list'
