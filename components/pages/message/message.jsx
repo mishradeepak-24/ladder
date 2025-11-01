@@ -3560,32 +3560,38 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
     /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   return (
+<div
+    className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none overflow-x-hidden"
+    style={{
+      minHeight: "100vh",
+      background: "transparent",
+      overflowX: "hidden", // Strictly lock horizontal scroll
+    }}
+  >
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-      style={{ minHeight: "100vh", background: "transparent" }} // no overlay
+      className="
+        w-full
+        mx-2
+        max-w-[420px]
+        h-[67vh]
+        bg-gray-900
+        text-white
+        rounded-xl
+        shadow-2xl
+        flex flex-col
+        overflow-hidden
+        border border-gray-700
+        pointer-events-auto
+      "
+      style={{
+        minWidth: 0,
+        maxWidth: "100vw",
+        minHeight: 320,
+        maxHeight: "95vh",
+        boxSizing: "border-box",
+        overflowX: "hidden", // lock modal itself
+      }}
     >
-      <div
-        className="
-          w-full
-          mx-2
-          max-w-[420px]
-          h-[67vh]
-          bg-gray-900
-          text-white
-          rounded-xl
-          shadow-2xl
-          flex flex-col
-          overflow-hidden
-          border border-gray-700
-          pointer-events-auto
-        "
-        style={{
-          minWidth: 0,
-          maxWidth: "100vw",
-          minHeight: 320,
-          maxHeight: "95vh",
-        }}
-      >
         {/* HEADER */}
         <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700 flex-shrink-0 relative">
           <h2 className="text-lg font-semibold flex-1 text-center">ChatBoard</h2>
