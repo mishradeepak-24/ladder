@@ -3455,284 +3455,6 @@
 
 
 
-// "use client";
-
-// import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-// import io from "socket.io-client";
-// import axios from "axios";
-
-// const socket = io("https://sportssolutionspro.com:8443", {
-//   transports: ["websocket"],
-// });
-
-// const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
-//   const [messages, setMessages] = useState([]);
-//   const [message, setMessage] = useState("");
-//   const [senderName, setSenderName] = useState("Unknown");
-//   const [senderId, setSenderId] = useState(null);
-//   const chatEndRef = useRef(null);
-
-//   useEffect(() => {
-//     if (propSenderId) {
-//       setSenderId(String(propSenderId));
-//       localStorage.setItem("senderId", String(propSenderId));
-//     } else {
-//       const stored = localStorage.getItem("senderId");
-//       if (stored) setSenderId(stored);
-//     }
-//   }, [propSenderId]);
-
-//   useEffect(() => {
-//     if (!senderId) return;
-//     axios
-//       .get(`https://sportssolutionspro.com:8443/player/${senderId}`)
-//       .then((res) => setSenderName(res.data?.name || "Unknown"))
-//       .catch(() => setSenderName("Unknown"));
-//   }, [senderId]);
-
-//   useEffect(() => {
-//     if (ladderId) socket.emit("join_room", ladderId);
-//   }, [ladderId]);
-
-//   const normalize = (arr) =>
-//     arr.map((msg) => ({
-//       ...msg,
-//       senderId: String(msg.senderId),
-//       senderName: msg.senderName || "Unknown",
-//       timestamp: msg.timestamp || new Date().toISOString(),
-//       message: msg.message || "",
-//     }));
-
-//   useEffect(() => {
-//     if (!ladderId) return;
-//     const saved = localStorage.getItem(`messages_${ladderId}`);
-//     if (saved) setMessages(normalize(JSON.parse(saved)));
-//   }, [ladderId]);
-
-//   useEffect(() => {
-//     if (!ladderId) return;
-//     axios
-//       .get(`https://sportssolutionspro.com:8443/group-messages/${ladderId}`)
-//       .then((res) => setMessages(normalize(res.data || [])))
-//       .catch(() => {});
-//   }, [ladderId]);
-
-//   useEffect(() => {
-//     const handleMsg = (data) => {
-//       const newMsg = normalize([data])[0];
-//       setMessages((prev) => [...prev, newMsg]);
-//     };
-//     socket.on("group_message", handleMsg);
-//     return () => socket.off("group_message", handleMsg);
-//   }, []);
-
-//   useLayoutEffect(() => {
-//     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   }, [messages]);
-
-//   const sendMessage = () => {
-//     if (!message.trim() || !senderId) return;
-//     const msgData = {
-//       senderId,
-//       senderName,
-//       ladderId,
-//       message,
-//       timestamp: new Date().toISOString(),
-//     };
-//     socket.emit("group_message", msgData);
-//     setMessage("");
-//   };
-
-//   useEffect(() => {
-//     document.body.style.overflow = "hidden";
-//     document.body.style.overflowX = "hidden";
-//     return () => {
-//       document.body.style.overflow = "auto";
-//       document.body.style.overflowX = "auto";
-//     };
-//   }, []);
-
-//   const isIOS =
-//     typeof navigator !== "undefined" &&
-//     /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-//   return (
-//     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 overscroll-none">
-//       <div
-//         className="
-//           w-full
-//           max-w-[95vw]
-//           sm:max-w-[370px]
-//           h-[65vh]
-//           bg-gray-900
-//           text-white
-//           rounded-xl
-//           shadow-2xl
-//           flex
-//           flex-col
-//           overflow-hidden
-//           border
-//           border-gray-700
-//           mx-auto
-//         "
-//         style={{ maxHeight: "95vh" }}
-//       >
-//         {/* Header */}
-//         <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700 flex-shrink-0 relative">
-//           <h2 className="text-lg font-semibold flex-1 text-center">
-//             ChatBoard
-//           </h2>
-//           <button
-//             onClick={onClose}
-//             className="absolute right-4 top-2 text-gray-400 hover:text-white text-2xl font-bold"
-//           >
-//             ×
-//           </button>
-//         </div>
-
-//         {/* Messages Area */}
-//         <div
-//           className="
-//             flex-1
-//             overflow-y-auto
-//             p-4
-//             bg-white
-//             space-y-3
-//             scrollbar-thin
-//             scrollbar-thumb-gray-600
-//             scrollbar-track-gray-700
-//           "
-//           style={{
-//             overscrollBehavior: "contain",
-//             minHeight: 0,
-//             height: "100%",
-//             maxHeight: "calc(100% - 58px - 58px)", // ~header+footer px
-//             WebkitOverflowScrolling: "touch",
-//           }}
-//         >
-//           {messages.length === 0 && (
-//             <div className="text-center text-gray-400 text-sm py-3">
-//               No messages yet. Be the first to post!
-//             </div>
-//           )}
-
-//           {messages.map((msg, i) => {
-//             const isOwn = msg.senderId === senderId;
-//             return (
-//               <div
-//                 key={i}
-//                 className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}
-//               >
-//                 <div
-//                   className={`px-3 py-2 rounded-lg shadow max-w-[80%] break-words whitespace-pre-wrap ${
-//                     isOwn
-//                       ? "bg-blue-600 text-white rounded-br-none"
-//                       : "bg-gray-700 text-gray-100 rounded-bl-none"
-//                   }`}
-//                 >
-//                   <p className="text-sm">{msg.message}</p>
-//                 </div>
-//                 <p
-//                   className={`text-xs mt-1 ${
-//                     isOwn ? "text-blue-300" : "text-gray-400"
-//                   }`}
-//                 >
-//                   <strong>{msg.senderName}</strong> •{" "}
-//                   {new Date(msg.timestamp).toLocaleTimeString([], {
-//                     hour: "2-digit",
-//                     minute: "2-digit",
-//                   })}
-//                 </p>
-//               </div>
-//             );
-//           })}
-//           <div ref={chatEndRef} />
-//         </div>
-
-//         {/* Input Section */}
-//         <div className="bg-gray-800 border-t border-gray-700 p-2 flex items-center flex-shrink-0 space-x-1" style={{ minHeight: 56 }}>
-//           <textarea
-//             placeholder="Type your message..."
-//             className="
-//               flex-1
-//               bg-gray-700
-//               text-white
-//               placeholder-gray-400
-//               border
-//               border-gray-600
-//               focus:border-blue-500
-//               focus:ring-0
-//               outline-none
-//               px-2
-//               py-2
-//               text-sm
-//               resize-none
-//               rounded-md
-//               leading-5
-//               overflow-y-auto
-//               max-h-24
-//             "
-//             value={message}
-//             rows={1}
-//             onChange={(e) => setMessage(e.target.value)}
-//             onKeyDown={(e) => {
-//               if (isIOS) return;
-//               if (e.key === "Enter" && !e.shiftKey) {
-//                 e.preventDefault();
-//                 sendMessage();
-//               }
-//             }}
-//           />
-//           <button
-//             onClick={sendMessage}
-//             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-semibold"
-//           >
-//             Send
-//           </button>
-//           <button
-//             onClick={onClose}
-//             className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-semibold"
-//           >
-//             Cancel
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MessageBoard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ===================part-6=====================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
@@ -3834,17 +3556,19 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
     typeof navigator !== "undefined" &&
     /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // This modal will always fit, no cut, nicely padded on all screens.
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ minHeight: "100vh", pointerEvents: "none" }}
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+      style={{
+        minHeight: "100vh",
+      }}
     >
       <div
         className="
           w-full
-          max-w-[425px]
-          h-[62vh]
+          mx-2
+          max-w-[420px]
+          h-[65vh]
           bg-gray-900
           text-white
           rounded-xl
@@ -3852,14 +3576,13 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
           flex flex-col
           overflow-hidden
           border border-gray-700
-          mx-2             // critical! horizontal gap on all mobiles!
           pointer-events-auto
         "
         style={{
           minWidth: 0,
           maxWidth: "100vw",
-          minHeight: 340,
-          maxHeight: "98vh"
+          minHeight: 320,
+          maxHeight: "95vh",
         }}
       >
         {/* Header */}
@@ -3881,7 +3604,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
             overscrollBehavior: "contain",
             height: "100%",
             minHeight: 0,
-            maxHeight: "calc(100% - 56px - 56px)"
+            maxHeight: "calc(100% - 56px - 56px)",
           }}
         >
           {messages.length === 0 && (
@@ -3976,6 +3699,36 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 };
 
 export default MessageBoard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ===================part-6=====================
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
