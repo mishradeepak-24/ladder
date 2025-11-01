@@ -3459,6 +3459,8 @@
 
 
 
+
+
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
@@ -3547,7 +3549,6 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
     setMessage("");
   };
 
-  // Lock body scroll when modal open
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     const originalOverscroll = document.body.style.overscrollBehaviorY;
@@ -3565,24 +3566,20 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4"
       style={{
         minHeight: "100vh",
         width: "100vw",
-        overflowX: "hidden",
-        background: "transparent",
+        overflow: "hidden",
+        backdropFilter: "blur(3px)",
       }}
     >
       <div
-        className="w-full mx-2 max-w-[420px] h-[67vh] bg-gray-900 text-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-700 pointer-events-auto"
+        className="w-full h-full sm:h-[80vh] max-w-md bg-gray-900 text-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-700"
         style={{
-          minWidth: 0,
-          maxWidth: "100vw",
-          width: "100%",
-          minHeight: 320,
-          maxHeight: "95vh",
+          maxWidth: "100%",
+          height: "calc(100vh - 2rem)",
           boxSizing: "border-box",
-          overflowX: "hidden",
         }}
       >
         {/* HEADER */}
@@ -3598,20 +3595,17 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 
         {/* MESSAGES AREA */}
         <div
-          className="flex-1 overflow-y-auto p-4 bg-white space-y-3"
+          className="flex-1 overflow-y-auto p-3 sm:p-4 bg-white space-y-3"
           style={{
             WebkitOverflowScrolling: "touch",
             overscrollBehavior: "contain",
-            height: "100%",
-            minHeight: 0,
-            maxHeight: "calc(100% - 56px - 56px)",
             width: "100%",
             maxWidth: "100%",
-            overflowX: "hidden",
+            flexGrow: 1,
           }}
         >
           {messages.length === 0 && (
-            <div className="text-center text-gray-400 text-sm py-3">
+            <div className="text-center text-gray-500 text-sm py-3">
               No messages yet. Be the first to post!
             </div>
           )}
@@ -3621,17 +3615,18 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
             return (
               <div
                 key={i}
-                className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}
-                style={{ width: "100%", maxWidth: "100%" }}
+                className={`flex flex-col ${
+                  isOwn ? "items-end" : "items-start"
+                } w-full`}
               >
                 <div
-                  className={`px-3 py-2 rounded-lg shadow max-w-[80%] break-words whitespace-pre-wrap ${
+                  className={`px-3 py-2 rounded-lg shadow max-w-[85%] break-words whitespace-pre-wrap ${
                     isOwn
                       ? "bg-blue-600 text-white rounded-br-none"
                       : "bg-gray-700 text-gray-100 rounded-bl-none"
                   }`}
                 >
-                  <p className="text-sm">{msg.message}</p>
+                  <p className="text-sm leading-snug">{msg.message}</p>
                 </div>
                 <p
                   className={`text-xs mt-1 ${
@@ -3651,11 +3646,14 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
         </div>
 
         {/* INPUT SECTION */}
-        <div className="bg-gray-800 border-t border-gray-700 p-2 flex items-center flex-shrink-0 space-x-1" style={{ minHeight: 56, width: "100%" }}>
+        <div className="bg-gray-800 border-t border-gray-700 p-2 flex items-center flex-shrink-0 space-x-2 sm:space-x-3">
           <textarea
             placeholder="Type your message..."
             className="flex-1 bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:border-blue-500 focus:ring-0 outline-none px-2 py-2 text-sm resize-none rounded-md leading-5 overflow-y-auto max-h-24"
-            style={{ width: "100%", maxWidth: "100%" }}
+            style={{
+              width: "100%",
+              minHeight: 40,
+            }}
             value={message}
             rows={1}
             onChange={(e) => setMessage(e.target.value)}
@@ -3669,13 +3667,13 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
           />
           <button
             onClick={sendMessage}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-semibold"
+            className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-semibold whitespace-nowrap"
           >
             Send
           </button>
           <button
             onClick={onClose}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-semibold"
+            className="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-semibold whitespace-nowrap"
           >
             Cancel
           </button>
@@ -3686,6 +3684,7 @@ const MessageBoard = ({ senderId: propSenderId, ladderId, onClose }) => {
 };
 
 export default MessageBoard;
+
 
 
 
